@@ -51,7 +51,7 @@ descriptionTextBox.SendKeys("Feb2023");
 
 // Input Prive per unit into price per unit textbox
 IWebElement priceTextbox = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
-priceTextbox.SendKeys("510");
+priceTextbox.SendKeys("309");
 
 // Click on the save button
 IWebElement saveButton = driver.FindElement(By.Id("SaveButton"));
@@ -67,18 +67,70 @@ goToLastPage.Click();
 // Wait for 5s
 Thread.Sleep(5000);
 
-// Navigate to the last one record
-IWebElement newTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
-if (newTimeRecord.Text == "Feb2023")
+// Navigate to the last one record and Click on the Edit button
+IWebElement newTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+newTimeRecord.Click();
+
+// Navigate to the Code textbox and Change Code name to FEBRUARY2023
+IWebElement newCodeName = driver.FindElement(By.Id("Code"));
+  // Clear up the textbox
+newCodeName.Clear();
+ // Input new Code name
+newCodeName.SendKeys("FEBRUARY2023");
+
+// Navigate to the Description textbox and change Decription to FEB2023
+IWebElement newDescription = driver.FindElement(By.Id("Description"));
+ // Clear up the textbox
+newDescription.Clear();
+// Input new description
+newDescription.SendKeys("FEB2023");
+
+// Click on the save button
+IWebElement newSaveButton = driver.FindElement(By.Id("SaveButton"));
+newSaveButton.Click();
+
+// Wait for 5s
+Thread.Sleep(5000);
+
+// Check if time recode has been change info
+IWebElement goToLastPage1 = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+goToLastPage1.Click();
+
+IWebElement changedTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+
+if (changedTimeRecord.Text == "FEBRUARY2023")
 {
-    Console.WriteLine("New Time Record Created Sucessfully!!!");
+    Console.WriteLine("The Time Record has been Change!");
 }
 else
 {
-    Console.WriteLine("New Time Record Hasn't Been Created!!!");
+    Console.WriteLine("Time Record Change Fail!");
 }
+
 // Wait for 5s
 Thread.Sleep(5000);
+
+// Navigate to the last one reconrd and Click on the Delete button
+IWebElement lastTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+lastTimeRecord.Click();
+
+// Acquire Alert and Click the Accept
+IAlert deleteAlert = driver.SwitchTo().Alert();
+deleteAlert.Accept();
+
+// Wait for 5s
+Thread.Sleep(5000);
+
+// Check if new time record has been delete
+IWebElement deleteTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+if(deleteTimeRecord.Text == "FEBRUARY2023")
+{
+    Console.WriteLine("The Time Record has not been delete!");
+}
+else
+{
+    Console.WriteLine("The Time Record has been delete!");
+}
 
 // Close the browser
 driver.Quit();
