@@ -35,10 +35,13 @@ IWebElement createNewButton = driver.FindElement(By.XPath("//*[@id=\"container\"
 createNewButton.Click();
 
 // Select Time option from TypeCode dropdown list
-IWebElement typeCode = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[1]/div/span[1]/span"));
+IWebElement typeCode = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[1]/div/span[1]/span/span[2]/span"));
 typeCode.Click();
 
-IWebElement timeOption = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[1]/div/span[1]/span/span[1]"));
+// Wait for 2s
+Thread.Sleep(2000);
+
+IWebElement timeOption = driver.FindElement(By.XPath("//*[@id=\"TypeCode_listbox\"]/li[2]"));
 timeOption.Click();
 
 // Input code into code textbox
