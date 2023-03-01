@@ -1,24 +1,61 @@
-﻿using OpenQA.Selenium.Chrome;
+﻿using Feb2023.Pages;
+using Feb2023.Utilities;
+using NUnit.Framework;
 using OpenQA.Selenium;
-using Feb2023.Pages;
+using OpenQA.Selenium.Chrome;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-// Open the broswer
-IWebDriver driver = new ChromeDriver();
+namespace Feb2023.Tests
+{
+    [TestFixture]
+    public class TM_Test: CommonDriver
+    {
+        [SetUp]
+        public void LoginStep()
+        {
+            driver = new ChromeDriver();
 
-// Login Page object initialization and definition
-LoginPage loginPageObj = new LoginPage();
-loginPageObj.LoginAction(driver);
+            // Login page object initialzation and definition
+            LoginPage loginObj = new LoginPage();
+            loginObj.LoginAction(driver);
 
-// Home Page object initialization and definition
-HomePage homePageObj = new HomePage();
-homePageObj.GoToTMPage(driver);
+            // Home page object initialzation and definition
+            HomePage homeObj = new HomePage();
+            homeObj.GoToTMPage(driver);
+        }
 
-// TM Page object initialization and definition
-TMPage tMPageObj = new TMPage();
-tMPageObj.CreateTM(driver);
+        [Test]
+        public void CreateNew()
+        {
+            // TM page object initialzation and definition
+            TMPage tMPageObj = new TMPage();
+            tMPageObj.CreateNew(driver);
+        }
 
-// Edit TM
-tMPageObj.EditTM(driver);
+        [Test]
+        public void Edit()
+        {
+            // TM page object initialzation and definition
+            TMPage tMPageObj = new TMPage();
+            tMPageObj.EditTM(driver); 
+        }
 
-// Delete TM
-tMPageObj.DeleteTM(driver);
+        [Test]
+        public void Delete()
+        {
+            // TM page object initialzation and definition
+            TMPage tMPageObj = new TMPage();
+            tMPageObj.DeleteTM(driver); 
+        }
+
+        [TearDown]
+        public void CloseBrowser()
+        { 
+            driver.Quit();
+        }
+    }
+}

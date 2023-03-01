@@ -1,7 +1,11 @@
-﻿using OpenQA.Selenium;
+﻿using Feb2023.Utilities;
+using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,73 +13,93 @@ namespace Feb2023.Pages
 {
     public class TMPage
     {
-        public void CreateTM(IWebDriver driver)
+        public void CreateNew(IWebDriver driver)
         {
-            // Click create new button
+            // Identify the Create New Button and click on it
             IWebElement createNewButton = driver.FindElement(By.XPath("//*[@id=\"container\"]/p/a"));
             createNewButton.Click();
-            // Select Time option from TypeCode dropdown list
+
+            // Identify the TypeCode drop down list and select the Time option
             IWebElement typeCode = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[1]/div/span[1]/span/span[2]/span"));
             typeCode.Click();
 
-            // Wait for 2s
-            Thread.Sleep(2000);
+            // selecte the time option
+            IWebElement timeOp = driver.FindElement(By.XPath("//*[@id=\"TypeCode_listbox\"]/li[2]"));
+            timeOp.Click();
 
-            IWebElement timeOption = driver.FindElement(By.XPath("//*[@id=\"TypeCode_listbox\"]/li[2]"));
-            timeOption.Click();
-
-            // Input code into code textbox
+            // Identify the Code Textbox and input code
             IWebElement codeTextBox = driver.FindElement(By.Id("Code"));
-            codeTextBox.SendKeys("Feb2023");
+            codeTextBox.SendKeys("March2023");
 
-            // Input Description into description textbox
+            // Identify the Description Textbox and input description
             IWebElement descriptionTextBox = driver.FindElement(By.Id("Description"));
-            descriptionTextBox.SendKeys("Feb2023");
+            descriptionTextBox.SendKeys("March2023");
 
-            // Input Prive per unit into price per unit textbox
-            IWebElement priceTextbox = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
-            priceTextbox.SendKeys("309");
+            // Identify the Price per unit TextBox and input the Price
+            IWebElement priceTextBox = driver.FindElement(By.XPath("//*[@id=\"TimeMaterialEditForm\"]/div/div[4]/div/span[1]/span/input[1]"));
+            priceTextBox.SendKeys("309");
 
-            // Click on the save button
+            // Identify the Save button and click on it
             IWebElement saveButton = driver.FindElement(By.Id("SaveButton"));
             saveButton.Click();
         }
 
         public void EditTM(IWebDriver driver)
         {
-            // Navigate to the last one record and Click on the Edit button
-            IWebElement newTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
-            newTimeRecord.Click();
+            // set a wait until element is clickable
+            Wait.WatiToBeClickable(driver, "XPath", "//*[@id=\"tmsGrid\"]/div[4]/a[4]/span", 5);
 
-            // Navigate to the Code textbox and Change Code name to FEBRUARY2023
-            IWebElement newCodeName = driver.FindElement(By.Id("Code"));
-            // Clear up the textbox
-            newCodeName.Clear();
-            // Input new Code name
-            newCodeName.SendKeys("FEBRUARY2023");
+            // Identify the Go To Last Page button and click on it
+            IWebElement GoToLastPage = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            GoToLastPage.Click();
 
-            // Navigate to the Description textbox and change Decription to FEB2023
-            IWebElement newDescription = driver.FindElement(By.Id("Description"));
-            // Clear up the textbox
-            newDescription.Clear();
-            // Input new description
-            newDescription.SendKeys("FEB2023");
+            // set a wait until element is clickable
+            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]")));
 
-            // Click on the save button
-            IWebElement newSaveButton = driver.FindElement(By.Id("SaveButton"));
-            newSaveButton.Click();
+            // Identify the last record and click the Edit button
+            IWebElement editButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
+            editButton.Click();
 
+            // Identify the Code TextBox and clear it, then input new code
+            IWebElement codeTextBox = driver.FindElement(By.Id("Code"));
+            codeTextBox.Clear();
+            codeTextBox.SendKeys("MARCH2023");
+
+            // Identify the Save button and click on it
+            IWebElement saveButton = driver.FindElement(By.Id("SaveButton"));
+            saveButton.Click();
+
+            // set a wait until element is clickable
+            Wait.WatiToBeClickable(driver, "XPath", "//*[@id=\"tmsGrid\"]/div[4]/a[4]/span", 5);
+            // Check if new Time record has been created
+            IWebElement GoToLastPage1 = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            GoToLastPage1.Click();
+            Thread.Sleep(5000);
+            IWebElement newCode = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[1]"));
+            Assert.That(newCode.Text == "MARCH2023", "Actual code and expected code do not match.");
         }
 
         public void DeleteTM(IWebDriver driver)
         {
-            // Navigate to the last one reconrd and Click on the Delete button
-            IWebElement lastTimeRecord = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
-            lastTimeRecord.Click();
+            // set a wait until element is clickable
+            Wait.WatiToBeClickable(driver, "XPath", "//*[@id=\"tmsGrid\"]/div[4]/a[4]/span", 5);
+
+            // Identify the Go To Last Page button and click on it
+            IWebElement GoToLastPage = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[4]/a[4]/span"));
+            GoToLastPage.Click();
+
+            // set a wait until element is clickable
+            Wait.WatiToBeClickable(driver, "XPath", "//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]", 5);
+
+            // Identify the last record and click the Delete Button
+            IWebElement deleteButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[2]"));
+            deleteButton.Click();
 
             // Acquire Alert and Click the Accept
             IAlert deleteAlert = driver.SwitchTo().Alert();
             deleteAlert.Accept();
         }
+
     }
 }
