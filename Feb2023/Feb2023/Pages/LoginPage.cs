@@ -1,4 +1,5 @@
-﻿using OpenQA.Selenium;
+﻿using NUnit.Framework;
+using OpenQA.Selenium;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,11 +17,17 @@ namespace Feb2023.Pages
 
             // lauch the turnup portal
             driver.Navigate().GoToUrl("http://horse.industryconnect.io/Account/Login?ReturnUrl=%2f");
-
-            // Identify the Username TextBox and enter valid username
-            IWebElement usernameTextBox = driver.FindElement(By.Id("UserName"));
-            usernameTextBox.SendKeys("hari");
-
+            try
+            {
+                // Identify the Username TextBox and enter valid username
+                IWebElement usernameTextBox = driver.FindElement(By.Id("UserName"));
+                usernameTextBox.SendKeys("hari");
+            }
+            catch (Exception ex)
+            {
+                Assert.Fail("Trunup Portal home page did not match!", ex.Message);
+            }
+            
             // Identify the Password TextBox and enter valid password
             IWebElement passwordTextBox = driver.FindElement(By.Id("Password"));
             passwordTextBox.SendKeys("123123");

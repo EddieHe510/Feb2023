@@ -54,8 +54,7 @@ namespace Feb2023.Pages
             GoToLastPage.Click();
 
             // set a wait until element is clickable
-            WebDriverWait wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
-            wait.Until(SeleniumExtras.WaitHelpers.ExpectedConditions.ElementToBeClickable(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]")));
+            Wait.WatiToBeClickable(driver, "XPath", "//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]", 5);
 
             // Identify the last record and click the Edit button
             IWebElement editButton = driver.FindElement(By.XPath("//*[@id=\"tmsGrid\"]/div[3]/table/tbody/tr[last()]/td[5]/a[1]"));
@@ -65,6 +64,13 @@ namespace Feb2023.Pages
             IWebElement codeTextBox = driver.FindElement(By.Id("Code"));
             codeTextBox.Clear();
             codeTextBox.SendKeys("MARCH2023");
+
+            // Identify the Description TextBox and clear it, then input new description
+            IWebElement descriptionTextBox = driver.FindElement(By.Id("Description"));
+            descriptionTextBox.Clear();
+            descriptionTextBox.SendKeys("EddieMarch2023");
+
+            Thread.Sleep(5000);
 
             // Identify the Save button and click on it
             IWebElement saveButton = driver.FindElement(By.Id("SaveButton"));
@@ -99,6 +105,8 @@ namespace Feb2023.Pages
             // Acquire Alert and Click the Accept
             IAlert deleteAlert = driver.SwitchTo().Alert();
             deleteAlert.Accept();
+
+            Assert.That(deleteButton.Text != "March2023", "Record hasn't been deleted!");
         }
 
     }
